@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  # ── Mock Payment Gateway ─────────────────────────────────────────────────────
+  mock-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    container_name: mock-gateway
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      GATEWAY_PORT: 3001
+      GATEWAY_FAILURE_RATE: "0.15"   # 15% intentional failure rate
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3001/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # ── Settlement Service ───────────────────────────────────────────────────────
+  settlement-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    container_name: settlement-service
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      GATEWAY_URL: http://mock-gateway:3001
+      GATEWAY_TIMEOUT_MS: "5000"
+      DB_PATH: /data/settlements.db
+      LOG_LEVEL: info
+    volumes:
+      - settlement-data:/data
+    depends_on:
+      mock-gateway:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+volumes:
+  settlement-data:
+    driver: local
