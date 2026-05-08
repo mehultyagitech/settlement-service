@@ -160,6 +160,113 @@
         },
         "description": "2.5 hours late - ceil = 3 hours x $15 = $45 fee"
       }
+    },
+    {
+      "name": "7. Overage Units Test",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"event\": \"BookingCompleted\", \"bookingId\": \"bk_overage_001\", \"userId\": \"user_999\", \"scheduledEnd\": \"2026-04-10T18:00:00Z\", \"actualEnd\": \"2026-04-10T18:00:00Z\", \"includedUnits\": 100, \"actualUnits\": 150, \"baseFareCents\": 5000, \"preAuthId\": \"auth_ov1\", \"preAuthAmountCents\": 50000}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/events/booking-completed",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            "booking-completed"
+          ]
+        },
+        "description": "50 extra units x $0.25 = $12.50 overage"
+      }
+    },
+    {
+      "name": "8. Get Non-Existent Settlement (404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/settlements/bk_does_not_exist",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "settlements",
+            "bk_does_not_exist"
+          ]
+        },
+        "description": "Should return 404 for non-existent booking"
+      }
+    },
+    {
+      "name": "9. Invalid Request (Missing Field)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"event\": \"BookingCompleted\", \"bookingId\": \"bk_invalid\", \"userId\": \"user_123\"}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/events/booking-completed",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            "booking-completed"
+          ]
+        },
+        "description": "Missing required fields - should return 400 validation error"
+      }
+    },
+    {
+      "name": "10. Combined Charges Test",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"event\": \"BookingCompleted\", \"bookingId\": \"bk_combined_001\", \"userId\": \"user_111\", \"scheduledEnd\": \"2026-04-10T18:00:00Z\", \"actualEnd\": \"2026-04-10T19:15:00Z\", \"includedUnits\": 100, \"actualUnits\": 125, \"baseFareCents\": 10000, \"preAuthId\": \"auth_comb\", \"preAuthAmountCents\": 50000}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/events/booking-completed",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            "booking-completed"
+          ]
+        },
+        "description": "Base: $100 + Overage: 25 x $0.25 = $6.25 + Late: 1.25h ceil=2 x $15 = $30"
+      }
     }
   ]
 }
