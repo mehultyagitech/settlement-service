@@ -16,7 +16,7 @@ GATEWAY_PORT=3001 node dist/mock-gateway/index.js
 GATEWAY_URL=http://localhost:3001 node dist/src/index.js
 ```
 
-## Quick Start (single command)
+## Quick Start with Docker (single command)
 
 ```bash
 docker compose up --build
