@@ -4,6 +4,18 @@ A production-grade booking settlement microservice. Receives `BookingCompleted` 
 
 ---
 
+## Running Locally Without Docker(single command)
+
+```bash
+npm run start:all
+
+# Terminal 1 — mock gateway
+GATEWAY_PORT=3001 node dist/mock-gateway/index.js
+
+# Terminal 2 — settlement service
+GATEWAY_URL=http://localhost:3001 node dist/src/index.js
+```
+
 ## Quick Start (single command)
 
 ```bash
@@ -18,19 +30,6 @@ Both services start, health-check each other, and are ready to accept traffic.
 | Mock Gateway       | http://localhost:3001 |
 
 ---
-
-## Running Locally Without Docker
-
-```bash
-npm install
-npm run build
-
-# Terminal 1 — mock gateway
-GATEWAY_PORT=3001 node dist/mock-gateway/index.js
-
-# Terminal 2 — settlement service
-GATEWAY_URL=http://localhost:3001 node dist/src/index.js
-```
 
 **Run tests:**
 ```bash
