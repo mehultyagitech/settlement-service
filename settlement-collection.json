@@ -268,5 +268,135 @@
         "description": "Base: $100 + Overage: 25 x $0.25 = $6.25 + Late: 1.25h ceil=2 x $15 = $30"
       }
     }
+  ],
+  "workflow": [
+    {
+      "id": "complete-settlement-test-workflow",
+      "name": "Complete Settlement API Workflow",
+      "description": "End-to-end workflow testing all settlement service APIs",
+      "steps": [
+        {
+          "name": "1. Health Check",
+          "request": "1. Health Check",
+          "enabled": true
+        },
+        {
+          "name": "2. Post First Booking",
+          "request": "2. Post Booking (First Time)",
+          "enabled": true
+        },
+        {
+          "name": "3. Test Idempotency (Post Duplicate)",
+          "request": "3. Post Duplicate (Test Idempotency)",
+          "enabled": true
+        },
+        {
+          "name": "4. Get Settlement Details",
+          "request": "4. Get Settlement",
+          "enabled": true
+        },
+        {
+          "name": "5. Test On-Time Booking",
+          "request": "5. On-Time Booking (No Fees)",
+          "enabled": true
+        },
+        {
+          "name": "6. Test Late Fee Calculation",
+          "request": "6. Late Booking (Test Late Fee)",
+          "enabled": true
+        },
+        {
+          "name": "7. Test Overage Charges",
+          "request": "7. Overage Units Test",
+          "enabled": true
+        },
+        {
+          "name": "8. Test 404 Error (Non-existent Settlement)",
+          "request": "8. Get Non-Existent Settlement (404)",
+          "enabled": true
+        },
+        {
+          "name": "9. Test Validation Error (Missing Field)",
+          "request": "9. Invalid Request (Missing Field)",
+          "enabled": true
+        },
+        {
+          "name": "10. Test Combined Charges",
+          "request": "10. Combined Charges Test",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "id": "core-happy-path-workflow",
+      "name": "Core Happy Path Workflow",
+      "description": "Quick test of core functionality: health → post → idempotency → get",
+      "steps": [
+        {
+          "name": "1. Health Check",
+          "request": "1. Health Check",
+          "enabled": true
+        },
+        {
+          "name": "2. Post Booking",
+          "request": "2. Post Booking (First Time)",
+          "enabled": true
+        },
+        {
+          "name": "3. Verify Idempotency",
+          "request": "3. Post Duplicate (Test Idempotency)",
+          "enabled": true
+        },
+        {
+          "name": "4. Retrieve Settlement",
+          "request": "4. Get Settlement",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "id": "charge-calculation-workflow",
+      "name": "Charge Calculation Scenarios",
+      "description": "Test all charge calculation edge cases",
+      "steps": [
+        {
+          "name": "1. On-Time (Base Only)",
+          "request": "5. On-Time Booking (No Fees)",
+          "enabled": true
+        },
+        {
+          "name": "2. Late Fee",
+          "request": "6. Late Booking (Test Late Fee)",
+          "enabled": true
+        },
+        {
+          "name": "3. Overage Units",
+          "request": "7. Overage Units Test",
+          "enabled": true
+        },
+        {
+          "name": "4. Combined Charges",
+          "request": "10. Combined Charges Test",
+          "enabled": true
+        }
+      ]
+    },
+    {
+      "id": "error-handling-workflow",
+      "name": "Error Handling Workflow",
+      "description": "Test error cases and edge conditions",
+      "steps": [
+        {
+          "name": "1. Non-Existent Settlement (404)",
+          "request": "8. Get Non-Existent Settlement (404)",
+          "enabled": true
+        },
+        {
+          "name": "2. Invalid Request (400)",
+          "request": "9. Invalid Request (Missing Field)",
+          "enabled": true
+        }
+      ]
+    }
   ]
 }

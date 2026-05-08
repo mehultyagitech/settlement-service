@@ -38,6 +38,39 @@ npm test
 
 ---
 
+## Postman Collection & Workflows
+
+Import [settlement-collection.json](settlement-collection.json) into Postman to access the complete API test suite with **four pre-built workflows**:
+
+### Workflows Available
+
+1. **Complete Settlement API Workflow** (`complete-settlement-test-workflow`)  
+   Run all 10 test cases in sequence:  
+   Health → PostBooking → Idempotency → GetSettlement → ChargeScenarios → ErrorCases  
+   **Use this for comprehensive testing.**
+
+2. **Core Happy Path Workflow** (`core-happy-path-workflow`)  
+   Quick 4-step validation: Health → Post → Verify Idempotency → Get  
+   **Use this for smoke tests.**
+
+3. **Charge Calculation Scenarios** (`charge-calculation-workflow`)  
+   Tests all charge-computation edge cases:  
+   On-time (no fees) → Late fees → Overage units → Combined charges  
+   **Use this to validate billing logic.**
+
+4. **Error Handling Workflow** (`error-handling-workflow`)  
+   Tests error cases: Non-existent settlement (404) → Invalid request (400)  
+   **Use this to verify error responses.**
+
+### How to Run
+
+1. **Import the collection** in Postman: Click Import → select `settlement-collection.json`
+2. **Open Workflows** tab in Postman
+3. **Select a workflow** from the list
+4. **Click Run** — all steps execute in sequence
+
+---
+
 ## API Reference
 
 ### `POST /events/booking-completed`
