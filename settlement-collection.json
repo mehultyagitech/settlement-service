@@ -1,0 +1,165 @@
+{
+  "info": {
+    "_postman_id": "settlement-service-1",
+    "name": "Settlement Service",
+    "description": "Settlement microservice API tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/health",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Check if service is running"
+      }
+    },
+    {
+      "name": "2. Post Booking (First Time)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"event\": \"BookingCompleted\", \"bookingId\": \"bk_8f2a\", \"userId\": \"user_123\", \"scheduledEnd\": \"2026-04-10T18:00:00Z\", \"actualEnd\": \"2026-04-10T19:30:00Z\", \"includedUnits\": 200, \"actualUnits\": 237, \"baseFareCents\": 8500, \"preAuthId\": \"auth_xyz\", \"preAuthAmountCents\": 50000}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/events/booking-completed",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            "booking-completed"
+          ]
+        },
+        "description": "Submit first time - expects 202 status"
+      }
+    },
+    {
+      "name": "3. Post Duplicate (Test Idempotency)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"event\": \"BookingCompleted\", \"bookingId\": \"bk_8f2a\", \"userId\": \"user_123\", \"scheduledEnd\": \"2026-04-10T18:00:00Z\", \"actualEnd\": \"2026-04-10T19:30:00Z\", \"includedUnits\": 200, \"actualUnits\": 237, \"baseFareCents\": 8500, \"preAuthId\": \"auth_xyz\", \"preAuthAmountCents\": 50000}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/events/booking-completed",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            "booking-completed"
+          ]
+        },
+        "description": "Submit same booking again - expects 200 with alreadyProcessed: true"
+      }
+    },
+    {
+      "name": "4. Get Settlement",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/settlements/bk_8f2a",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "settlements",
+            "bk_8f2a"
+          ]
+        },
+        "description": "Retrieve settlement details"
+      }
+    },
+    {
+      "name": "5. On-Time Booking (No Fees)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"event\": \"BookingCompleted\", \"bookingId\": \"bk_ontime_001\", \"userId\": \"user_456\", \"scheduledEnd\": \"2026-04-10T18:00:00Z\", \"actualEnd\": \"2026-04-10T18:00:00Z\", \"includedUnits\": 200, \"actualUnits\": 180, \"baseFareCents\": 5000, \"preAuthId\": \"auth_abc\", \"preAuthAmountCents\": 50000}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/events/booking-completed",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            "booking-completed"
+          ]
+        },
+        "description": "No overage, no late fee - only base fare"
+      }
+    },
+    {
+      "name": "6. Late Booking (Test Late Fee)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"event\": \"BookingCompleted\", \"bookingId\": \"bk_late_001\", \"userId\": \"user_789\", \"scheduledEnd\": \"2026-04-10T18:00:00Z\", \"actualEnd\": \"2026-04-10T20:30:00Z\", \"includedUnits\": 200, \"actualUnits\": 200, \"baseFareCents\": 3000, \"preAuthId\": \"auth_def\", \"preAuthAmountCents\": 50000}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/events/booking-completed",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "events",
+            "booking-completed"
+          ]
+        },
+        "description": "2.5 hours late - ceil = 3 hours x $15 = $45 fee"
+      }
+    }
+  ]
+}
