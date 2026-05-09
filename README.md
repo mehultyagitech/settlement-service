@@ -4,6 +4,12 @@ A production-grade booking settlement microservice. Receives `BookingCompleted` 
 
 ---
 
+## Quick Start with Docker (single command)
+
+```bash
+docker compose up --build
+```
+
 ## Running Locally Without Docker(single command)
 
 ```bash
@@ -14,12 +20,6 @@ GATEWAY_PORT=3001 node dist/mock-gateway/index.js
 
 # Terminal 2 — settlement service
 GATEWAY_URL=http://localhost:3001 node dist/src/index.js
-```
-
-## Quick Start with Docker (single command)
-
-```bash
-docker compose up --build
 ```
 
 Both services start, health-check each other, and are ready to accept traffic.
