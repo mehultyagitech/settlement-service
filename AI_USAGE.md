@@ -7,6 +7,7 @@ As required by the assignment: an honest account of how AI was used in this proj
 ## Tools Used
 
 - **Claude Sonnet 4 (claude.ai)** — Primary tool for architecture planning, code generation, and test design
+- **Copilot** - For inline code suggestions
 
 ---
 
