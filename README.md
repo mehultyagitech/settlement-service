@@ -368,3 +368,4 @@ Key tests:
 5. **Admin API**: `GET /settlements?status=failed&userId=x&from=2026-01-01` with cursor pagination
 6. **Proper DB migrations**: `db-migrate` or `flyway` with versioned migration files and rollback support
 7. **Multi-replica safety**: Replace DB advisory lock with Redis Redlock; add optimistic concurrency control on settlement rows
+8. **Concurrency stress testing**: Expand the idempotency test suite with true concurrent async submissions (`Promise.all`) to better simulate real-world duplicate event delivery. While Node.js executes JavaScript on a single thread, concurrent async I/O can still create race conditions around shared resources and database writes.

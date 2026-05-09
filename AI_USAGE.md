@@ -52,8 +52,31 @@ The AI didn't ask about the deployment environment before recommending a native 
 **Lesson:**  
 When AI recommends a dependency, verify it will build in your actual runtime before writing any code against it. Native addons in particular have silent failure modes in constrained environments that don't surface until `npm install` or Docker build time.
 
+**Another Problem**
+In a few places the AI produced retry logic that looked correct at first glance but did not preserve idempotency guarantees across process restarts. Those sections were rewritten after reasoning through failure scenarios manually.
+
 ---
 
 ## General Notes
 
 AI was used for scaffolding, boilerplate reduction, and as a sounding board for architectural tradeoffs. All business logic (charge calculation rules, idempotency design, retry strategy selection, the choice to use `Math.ceil` for partial hours) was reasoned through manually and verified with tests. The test suite was designed to catch real bugs — boundary conditions for the charge calculator, the "10 retries = 1 charge" proof — not to hit a coverage number.
+
+## Scope of AI Assistance
+
+AI was used as an engineering assistant — primarily for:
+- architecture brainstorming
+- boilerplate generation
+- retry/idempotency design discussions
+- edge-case exploration
+- test-case generation
+
+All final implementation decisions, debugging, integration work, and verification were done manually.
+
+## Final Verdict
+Every AI-generated suggestion was validated either through:
+- automated tests
+- runtime behavior
+- concurrency testing
+- manual code review
+
+No generated code was accepted without verification.
