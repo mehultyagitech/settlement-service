@@ -4,6 +4,49 @@ A production-grade booking settlement microservice. Receives `BookingCompleted` 
 
 ---
 
+## Table of Contents
+
+- [Pre-Requisites](#pre-requisites)
+- [Quick Start with Docker](#quick-start-with-docker-single-command)
+- [Running Locally Without Docker](#running-locally-without-dockersingle-command)
+- [Postman Collection & Workflows](#postman-collection--workflows)
+- [API Reference](#api-reference)
+  - [POST /events/booking-completed](#post-eventsbooking-completed)
+  - [GET /settlements/:bookingId](#get-settlementsbookingid)
+  - [GET /health](#get-health)
+- [Charge Calculation](#charge-calculation)
+- [Architecture](#architecture)
+- [Key Design Decisions](#key-design-decisions)
+  - [Three-layer Idempotency](#three-layer-idempotency)
+  - [Retry Strategy: Exponential Backoff + Full Jitter](#retry-strategy-exponential-backoff--full-jitter)
+  - [Why sql.js (Pure-WASM SQLite)?](#why-sqljs-pure-wasm-sqlite)
+  - [Mock Gateway Flakiness](#mock-gateway-flakiness)
+- [Project Structure](#project-structure)
+- [Test Suite](#test-suite)
+- [Environment Variables](#environment-variables)
+- [Tradeoffs & Scope Cuts](#tradeoffs--scope-cuts)
+- [What I'd Do With More Time](#what-id-do-with-more-time)
+
+## Pre-Requisites
+
+Before running the project, ensure the following are installed:
+
+| Tool | Version Recommended |
+|------|---------------------|
+| Node.js | >= 20.x |
+| npm | >= 10.x |
+| Docker | Latest |
+| Docker Compose | Latest |
+
+### Verify Installation
+
+```bash
+node -v
+npm -v
+docker -v
+docker compose version
+```
+
 ## Quick Start with Docker (single command)
 
 ```bash
@@ -65,9 +108,9 @@ Import [settlement-collection.json](settlement-collection.json) into Postman to 
 ### How to Run
 
 1. **Import the collection** in Postman: Click Import → select `settlement-collection.json`
-2. **Open Workflows** tab in Postman
-3. **Select a workflow** from the list
-4. **Click Run** — all steps execute in sequence
+2. **Open Collections** tab in Postman
+3. **Select an API** from the list
+4. **Click Run** — it will execute the test case
 
 ---
 
